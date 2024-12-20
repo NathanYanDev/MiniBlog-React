@@ -1,0 +1,1 @@
+- To add components `bunx --bun shadcn@latest add`
