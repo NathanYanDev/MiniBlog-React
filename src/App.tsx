@@ -1,15 +1,28 @@
-import './App.css';
-import {app} from "../firebase/config"
+// Importing styles
+import "./App.css";
 
-// To add components `bunx --bun shadcn@latest add`
+// Importing react-router related modules
+import { BrowserRouter, Routes, Route } from "react-router";
 
-function App() {
-	console.log(app)
+// Importing pages
+import { About } from "./pages/About/About.tsx";
+import { Navbar } from "./components/Navbar.tsx";
+import { Home } from "./pages/Home/Home.tsx";
+import { Footer } from "./components/Footer.tsx";
+
+export function App() {
 	return (
-		<div className='container'>
-			<h1 className='text-2xl'>Mini Blog</h1>
+		<div className="w-full">
+			<BrowserRouter>
+				<Navbar />
+				<div className="container">
+					<Routes>
+						<Route index element={<Home />} />
+						<Route path="/about" element={<About />} />
+					</Routes>
+				</div>
+				<Footer />
+			</BrowserRouter>
 		</div>
 	);
 }
-
-export default App;
