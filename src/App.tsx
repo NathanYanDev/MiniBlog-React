@@ -2,20 +2,20 @@
 import "./App.css";
 
 // Importing react-router related modules
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 
+import { Footer } from "./components/Footer.tsx";
+import { Navbar } from "./components/Navbar.tsx";
 // Importing pages
 import { About } from "./pages/About/About.tsx";
-import { Navbar } from "./components/Navbar.tsx";
 import { Home } from "./pages/Home/Home.tsx";
-import { Footer } from "./components/Footer.tsx";
 
 export function App() {
 	return (
 		<div className="w-full">
 			<BrowserRouter>
 				<Navbar />
-				<div className="container">
+				<div className="container h-screen mt-3">
 					<Routes>
 						<Route index element={<Home />} />
 						<Route path="/about" element={<About />} />

@@ -31,12 +31,12 @@
 	"javascript": {
 		"formatter": {
 			"enabled": true,
-			"quoteStyle": "single",
+			"quoteStyle": "double",
 			"indentWidth": 4,
 			"indentStyle": "tab",
 			"semicolons": "always",
 			"trailingCommas": "all",
-			"jsxQuoteStyle": "single"
+			"jsxQuoteStyle": "double"
 		}
 	},
 	"json": {
