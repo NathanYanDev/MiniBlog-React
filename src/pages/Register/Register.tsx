@@ -1,33 +1,36 @@
-import type { z } from "zod";
 import { registerFormSchema } from "@/schemas/registerFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import type { z } from "zod";
 
+import { Button } from "@/components/ui/button";
 import {
 	Form,
-	FormLabel,
+	FormControl,
 	FormDescription,
 	FormField,
 	FormItem,
-	FormControl,
+	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+
+import { useAuthentication } from "@/hooks/useAuthentication";
+import { SpinIcon } from "@/components/ui/SpinIcon";
 
 export const Register = () => {
+	const { createUser, error, loading } = useAuthentication();
+
 	const form = useForm<z.infer<typeof registerFormSchema>>({
 		resolver: zodResolver(registerFormSchema),
-		defaultValues: {
-			username: "",
-			email: "",
-			password: "",
-			confirmPassword: "",
-		},
 	});
 
-	const createUser = (data: z.infer<typeof registerFormSchema>) => {
-		console.log(data);
+	const handleSubmitRegister = async (
+		data: z.infer<typeof registerFormSchema>,
+	) => {
+		const res = await createUser(data);
+
+		console.log(res);
 	};
 
 	return (
@@ -42,7 +45,7 @@ export const Register = () => {
 			</div>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(createUser)}
+					onSubmit={form.handleSubmit(handleSubmitRegister)}
 					className="w-full flex flex-col gap-2"
 				>
 					<FormField
@@ -112,7 +115,14 @@ export const Register = () => {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit">Registrar</Button>
+					{loading ? (
+						<Button type="submit" disabled className="bg-slate-700">
+							<SpinIcon className="animate-spin" />
+							<span className="text-white">Processando</span>
+						</Button>
+					) : (
+						<Button type="submit">Registrar</Button>
+					)}
 				</form>
 			</Form>
 		</div>

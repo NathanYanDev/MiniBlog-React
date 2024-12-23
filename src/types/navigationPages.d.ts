@@ -5,6 +5,7 @@ export type NamePagesType =
 	| "Novo Post"
 	| "Dashboard"
 	| "Login"
+	| "Registrar"
 	| "Sair";
 
 // Type definition for the page
@@ -21,5 +22,6 @@ export type NavigationPagesType = {
 	newPost: PageType;
 	dashboard: PageType;
 	login: PageType;
+	register: PageType;
 	exit: PageType;
 };

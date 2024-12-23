@@ -26,8 +26,13 @@ export const navigationPages: NavigationPagesType = {
 		name: "Login",
 		path: "/login",
 	},
-	exit: {
+	register: {
 		id: 6,
+		name: "Registrar",
+		path: "/register",
+	},
+	exit: {
+		id: 7,
 		name: "Sair",
 		path: "/exit",
 	},

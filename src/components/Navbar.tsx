@@ -10,7 +10,6 @@ import { navigationPages } from "@/constants/navigationPages";
 import type { NamePagesType, PageType } from "@/types/navigationPages";
 
 export const Navbar = () => {
-	const [loggedIn] = useState(true);
 	const [activePage, setActivePage] = useState<NamePagesType>("Home");
 	const location = useLocation();
 
@@ -26,6 +25,8 @@ export const Navbar = () => {
 			setActivePage("Dashboard");
 		} else if (path === "/login") {
 			setActivePage("Login");
+		} else if (path === "/register") {
+			setActivePage("Registrar");
 		} else if (path === "/exit") {
 			setActivePage("Sair");
 		}
@@ -43,25 +44,21 @@ export const Navbar = () => {
 				</NavLink>
 			</div>
 			<ul className="nav-links flex">
-				{Object.values(navigationPages).map(
-					(page: PageType) =>
-						loggedIn &&
-						page.name !== "Login" && (
-							<li key={page.id}>
-								<NavLink to={page.path}>
-									<Button
-										className={
-											activePage === page.name
-												? "text-slate-950 border-slate-950 bg-white rounded-none "
-												: "bg-slate-950 text-white rounded-none "
-										}
-									>
-										{page.name}
-									</Button>
-								</NavLink>
-							</li>
-						),
-				)}
+				{Object.values(navigationPages).map((page: PageType) => (
+					<li key={page.id}>
+						<NavLink to={page.path}>
+							<Button
+								className={
+									activePage === page.name
+										? "text-slate-950 border-slate-950 bg-white rounded-none "
+										: "bg-slate-950 text-white rounded-none "
+								}
+							>
+								{page.name}
+							</Button>
+						</NavLink>
+					</li>
+				))}
 			</ul>
 		</nav>
 	);
