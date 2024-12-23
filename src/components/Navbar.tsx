@@ -34,9 +34,12 @@ export const Navbar = () => {
 	// Defining all the navigation pages
 	return (
 		<nav className="navbar h-auto p-5 flex align-center justify-between shadow-lg shadow-black/15">
-			<div className="logo">
-				<NavLink to="/">
-					Mini <span className="uppercase">Blog</span>
+			<div>
+				<NavLink to="/" className={"text-xl"}>
+					Mini{" "}
+					<span className="uppercase text-slate-950 font-bold">
+						Blog
+					</span>
 				</NavLink>
 			</div>
 			<ul className="nav-links flex">
@@ -44,13 +47,13 @@ export const Navbar = () => {
 					(page: PageType) =>
 						loggedIn &&
 						page.name !== "Login" && (
-							<li key={page.id} className="mr-2">
+							<li key={page.id}>
 								<NavLink to={page.path}>
 									<Button
 										className={
 											activePage === page.name
-												? "text-slate-900 border-slate-900 bg-white"
-												: "bg-slate-900 text-white"
+												? "text-slate-950 border-slate-950 bg-white rounded-none "
+												: "bg-slate-950 text-white rounded-none "
 										}
 									>
 										{page.name}
