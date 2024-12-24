@@ -1,66 +1,113 @@
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "@/firebase/config";
+// Importing React Hooks
+import { useEffect, useState } from "react";
 
-import {
-	getAuth,
-	createUserWithEmailAndPassword,
-	signInWithEmailAndPassword,
-	updateProfile,
-	signOut,
-} from "firebase/auth";
-
-import { useState, useEffect } from "react";
-
-import type { registerFormSchema } from "@/schemas/registerFormSchema";
+// Importing Types from Zod
 import type { z } from "zod";
 
+// Importing firebase configuration
+import { firebaseConfig } from "@/firebase/config";
+
+// Importing Firebase functions to initialize the app and handle authentication.
+import { initializeApp } from "firebase/app";
+import {
+	createUserWithEmailAndPassword,
+	getAuth,
+	updateProfile,
+} from "firebase/auth";
+
+// Importing Error Type
+import type { ErrorType } from "@/types/error";
+
+// importing Register Form Schema created using Zod
+import type { registerFormSchema } from "@/schemas/registerFormSchema";
+
 export const useAuthentication = () => {
+	// Creating app with firebase config
 	const app = initializeApp(firebaseConfig);
 
-	console.log(app);
+	// Creating a state to handle with errors
+	const [error, setError] = useState<ErrorType>({
+		code: null,
+		title: "",
+		description: "",
+	});
 
-	const [error, setError] = useState<Error | string>("");
-	const [loading, setLoading] = useState<boolean | null>(null);
+	const [loading, setLoading] = useState<boolean>(false);
 
+	// State to handle component unmounting
 	const [cancelled, setCancelled] = useState<boolean>(false);
 
+	// Initializing Firebase Authentication
 	const auth = getAuth(app);
 
+	// Function to treat memory leak
 	const checkIfCancelled = () => {
 		if (cancelled) {
 			return;
 		}
 	};
 
+	// Reseting error state
+	const resetErrorState = () => {
+		setError((prevState) => ({
+			...prevState,
+			code: null,
+			title: "",
+			description: "",
+		}));
+	};
+
+	//
 	const createUser = async (data: z.infer<typeof registerFormSchema>) => {
 		checkIfCancelled();
+		resetErrorState();
 
+		// Initializing loading state until request finish
 		setLoading(true);
 
 		try {
+			// Get user info from firebase function
 			const { user } = await createUserWithEmailAndPassword(
 				auth,
 				data.email,
 				data.password,
 			);
 
+			// Update display name profile
 			await updateProfile(user, {
 				displayName: data.username,
 			});
 
+			// Ending loading state
 			setLoading(false);
 
 			return user;
 		} catch (err) {
 			if (err instanceof Error) {
-				setError(err.message);
+				// Treating error where email is already created
+				if (err.message.includes("email-already-in-use")) {
+					setError((prevState) => ({
+						...prevState,
+						code: 409,
+						title: "O email já foi cadastrado",
+						description:
+							"Cadastre outro email ou tente realizar o login por esse já cadastrado",
+					}));
+				} else {
+					// Treating other errors
+					setError((prevState) => ({
+						...prevState,
+						code: 400,
+						title: "Ocorreu um erro",
+						description: "Tente novamente",
+					}));
+				}
+
+				// Ending loading state
 				setLoading(false);
-				console.log(error);
 			}
 		}
 	};
-
-	// TODO: VERIFICAR EMAILS JÁ CADASTRADOS, COLOCAR UM ALERTA COM SHADCN
 
 	useEffect(() => {
 		return () => setCancelled(true);

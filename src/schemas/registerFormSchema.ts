@@ -1,5 +1,7 @@
+// Importing Zod
 import { z } from "zod";
 
+// Creating a schema with some validations
 export const registerFormSchema = z
 	.object({
 		username: z

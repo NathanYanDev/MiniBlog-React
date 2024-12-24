@@ -1,8 +1,15 @@
-import { registerFormSchema } from "@/schemas/registerFormSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
+// Importing hooks
+import { useAuthentication } from "@/hooks/useAuthentication";
 import { useForm } from "react-hook-form";
-import type { z } from "zod";
+import { useState } from "react";
 
+// Importing Types and Schemas
+import { registerFormSchema } from "@/schemas/registerFormSchema";
+import type { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Components
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -14,21 +21,37 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import { useAuthentication } from "@/hooks/useAuthentication";
 import { SpinIcon } from "@/components/ui/SpinIcon";
 
 export const Register = () => {
+	// Get createUser, error and loading from useAuthentication
 	const { createUser, error, loading } = useAuthentication();
 
+	// Creating a function to handle with AlertBox
+	const [showAlertBox, setShowAlertBox] = useState(false);
+
+	// Initializes the form with validation using Zod, inferring the type based on the RegisterForm schema
 	const form = useForm<z.infer<typeof registerFormSchema>>({
-		resolver: zodResolver(registerFormSchema),
+		resolver: zodResolver(registerFormSchema), // Conecting Zod schema with React Hook Form
 	});
 
+	// Asynchronous function to register a user, calling the 'createUser' API with form data
 	const handleSubmitRegister = async (
 		data: z.infer<typeof registerFormSchema>,
 	) => {
-		const res = await createUser(data);
+		const res = await createUser(data)
+			.then((userDetails) => {
+				setShowAlertBox(true); // Shows alert on success
+				return userDetails;
+			})
+			.catch(() => {
+				setShowAlertBox(true); // Shows alert on error
+			});
+
+		// Hides the alert after 10 seconds
+		setTimeout(() => {
+			setShowAlertBox(false);
+		}, 10000);
 
 		console.log(res);
 	};
@@ -125,6 +148,24 @@ export const Register = () => {
 					)}
 				</form>
 			</Form>
+
+			{/* Verifying if alert box will show an error or a success message */}
+			{showAlertBox && error?.code !== null && (
+				<Alert className={"mt-3"} variant={"destructive"}>
+					<AlertTitle>{error.title}</AlertTitle>
+					<AlertDescription>{error.description}</AlertDescription>
+				</Alert>
+			)}
+			{showAlertBox && error?.code === null && (
+				<Alert className="mt-3 bg-emerald-600 text-white">
+					<AlertTitle className="font-bold">
+						Cadastro realizado com sucesso
+					</AlertTitle>
+					<AlertDescription>
+						Redirecionando a tela de login
+					</AlertDescription>
+				</Alert>
+			)}
 		</div>
 	);
 };

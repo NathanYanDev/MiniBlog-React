@@ -10,9 +10,13 @@ import { navigationPages } from "@/constants/navigationPages";
 import type { NamePagesType, PageType } from "@/types/navigationPages";
 
 export const Navbar = () => {
+	// Creating a state to track which page is active
 	const [activePage, setActivePage] = useState<NamePagesType>("Home");
+
+	// Get location URL
 	const location = useLocation();
 
+	// Set the active page state with current path
 	useEffect(() => {
 		const path = location.pathname;
 		if (path === "/") {
