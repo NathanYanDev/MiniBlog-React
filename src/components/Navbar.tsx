@@ -5,11 +5,18 @@ import { useEffect, useState } from "react";
 // Importing React Router NavLink
 import { NavLink, useLocation } from "react-router";
 
-// Importing navigationPages from constants and PageType from types
-import { navigationPages } from "@/constants/navigationPages";
+// Importing hooks and context
+import { useAuthentication } from "@/hooks/useAuthentication";
+import { useAuthValue } from "@/context/AuthContext";
+
+// Importing pages from constants and PageType from types
+import { loggedPages, publicPages } from "@/constants/navigationPages";
 import type { NamePagesType, PageType } from "@/types/navigationPages";
 
 export const Navbar = () => {
+	const { user } = useAuthValue();
+	const { logout } = useAuthentication();
+
 	// Creating a state to track which page is active
 	const [activePage, setActivePage] = useState<NamePagesType>("Home");
 
@@ -23,7 +30,7 @@ export const Navbar = () => {
 			setActivePage("Home");
 		} else if (path === "/about") {
 			setActivePage("About");
-		} else if (path === "/new-post") {
+		} else if (path === "/posts/create") {
 			setActivePage("Novo Post");
 		} else if (path === "/dashboard") {
 			setActivePage("Dashboard");
@@ -38,9 +45,9 @@ export const Navbar = () => {
 
 	// Defining all the navigation pages
 	return (
-		<nav className="navbar h-auto p-5 flex align-center justify-between shadow-lg shadow-black/15">
+		<nav className="navbar h-auto flex items-center justify-between shadow-lg shadow-black/15">
 			<div>
-				<NavLink to="/" className={"text-xl"}>
+				<NavLink to="/" className="text-xl pl-5">
 					Mini{" "}
 					<span className="uppercase text-slate-950 font-bold">
 						Blog
@@ -48,21 +55,52 @@ export const Navbar = () => {
 				</NavLink>
 			</div>
 			<ul className="nav-links flex">
-				{Object.values(navigationPages).map((page: PageType) => (
-					<li key={page.id}>
-						<NavLink to={page.path}>
-							<Button
-								className={
-									activePage === page.name
-										? "text-slate-950 border-slate-950 bg-white rounded-none "
-										: "bg-slate-950 text-white rounded-none "
-								}
-							>
-								{page.name}
-							</Button>
-						</NavLink>
-					</li>
-				))}
+				{!user
+					? Object.values(publicPages).map((page: PageType) => (
+							<li key={page.id}>
+								<NavLink to={page.path}>
+									<Button
+										className={
+											activePage === page.name
+												? "text-slate-950 border-slate-950 bg-white rounded-none h-12 text-base"
+												: "bg-slate-950 text-white rounded-none h-12 text-base"
+										}
+									>
+										{page.name}
+									</Button>
+								</NavLink>
+							</li>
+						))
+					: Object.values(loggedPages).map((page: PageType) =>
+							page.name === "Sair" ? (
+								<li key={page.id}>
+									<NavLink to={page.path}>
+										<Button
+											className={
+												"text-white bg-red-700 rounded-none h-12 text-base"
+											}
+											onClick={logout}
+										>
+											{page.name}
+										</Button>
+									</NavLink>
+								</li>
+							) : (
+								<li key={page.id}>
+									<NavLink to={page.path}>
+										<Button
+											className={
+												activePage === page.name
+													? "text-slate-950 border-slate-950 bg-white rounded-none h-12 text-base "
+													: "bg-slate-950 text-white rounded-none h-12 text-base "
+											}
+										>
+											{page.name}
+										</Button>
+									</NavLink>
+								</li>
+							),
+						)}
 			</ul>
 		</nav>
 	);

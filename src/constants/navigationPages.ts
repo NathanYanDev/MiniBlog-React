@@ -1,6 +1,6 @@
 import type { NavigationPagesType } from "@/types/navigationPages";
 
-export const navigationPages: NavigationPagesType = {
+const loggedPages: NavigationPagesType = {
 	home: {
 		id: 1,
 		name: "Home",
@@ -14,12 +14,30 @@ export const navigationPages: NavigationPagesType = {
 	newPost: {
 		id: 3,
 		name: "Novo Post",
-		path: "/new-post",
+		path: "/posts/create",
 	},
 	dashboard: {
 		id: 4,
 		name: "Dashboard",
 		path: "/dashboard",
+	},
+	exit: {
+		id: 7,
+		name: "Sair",
+		path: "/",
+	},
+};
+
+const publicPages: NavigationPagesType = {
+	home: {
+		id: 1,
+		name: "Home",
+		path: "/",
+	},
+	about: {
+		id: 2,
+		name: "About",
+		path: "/about",
 	},
 	login: {
 		id: 5,
@@ -31,9 +49,6 @@ export const navigationPages: NavigationPagesType = {
 		name: "Registrar",
 		path: "/register",
 	},
-	exit: {
-		id: 7,
-		name: "Sair",
-		path: "/exit",
-	},
 };
+
+export { loggedPages, publicPages };

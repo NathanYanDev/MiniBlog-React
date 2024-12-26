@@ -19,9 +19,9 @@ export type PageType = {
 export type NavigationPagesType = {
 	home: PageType;
 	about: PageType;
-	newPost: PageType;
-	dashboard: PageType;
-	login: PageType;
-	register: PageType;
-	exit: PageType;
+	newPost?: PageType;
+	dashboard?: PageType;
+	login?: PageType;
+	register?: PageType;
+	exit?: PageType;
 };

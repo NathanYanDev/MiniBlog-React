@@ -13,6 +13,8 @@ import {
 	createUserWithEmailAndPassword,
 	getAuth,
 	updateProfile,
+	signInWithEmailAndPassword,
+	signOut,
 } from "firebase/auth";
 
 // Importing Error Type
@@ -20,6 +22,7 @@ import type { ErrorType } from "@/types/error";
 
 // importing Register Form Schema created using Zod
 import type { registerFormSchema } from "@/schemas/registerFormSchema";
+import type { loginFormSchema } from "@/schemas/loginFormSchema";
 
 export const useAuthentication = () => {
 	// Creating app with firebase config
@@ -109,6 +112,50 @@ export const useAuthentication = () => {
 		}
 	};
 
+	// User logout
+	const logout = () => {
+		checkIfCancelled();
+		signOut(auth);
+	};
+
+	// User login
+	const login = async (data: z.infer<typeof loginFormSchema>) => {
+		checkIfCancelled();
+		resetErrorState();
+		setLoading(true);
+
+		try {
+			await signInWithEmailAndPassword(auth, data.email, data.password);
+
+			// Ending loading state
+			setLoading(false);
+		} catch (err) {
+			if (err instanceof Error) {
+				// Treating error where email is already created
+				if (err.message.includes("invalid-credential")) {
+					setError((prevState) => ({
+						...prevState,
+						code: 404,
+						title: "Email/senha incorreto",
+						description:
+							"Verifique se o email ou a senha foi digitado corretamente",
+					}));
+				} else {
+					// Treating other errors
+					setError((prevState) => ({
+						...prevState,
+						code: 500,
+						title: "Erro interno",
+						description: "Tente novamente mais tarde",
+					}));
+				}
+
+				// Ending loading state
+				setLoading(false);
+			}
+		}
+	};
+
 	useEffect(() => {
 		return () => setCancelled(true);
 	}, []);
@@ -116,6 +163,8 @@ export const useAuthentication = () => {
 	return {
 		auth,
 		createUser,
+		login,
+		logout,
 		error,
 		loading,
 	};

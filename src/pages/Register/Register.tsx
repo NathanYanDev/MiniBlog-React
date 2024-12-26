@@ -39,30 +39,21 @@ export const Register = () => {
 	const handleSubmitRegister = async (
 		data: z.infer<typeof registerFormSchema>,
 	) => {
-		const res = await createUser(data)
-			.then((userDetails) => {
-				setShowAlertBox(true); // Shows alert on success
-				return userDetails;
-			})
-			.catch(() => {
-				setShowAlertBox(true); // Shows alert on error
-			});
+		await createUser(data).finally(() => setShowAlertBox(true));
 
 		// Hides the alert after 10 seconds
 		setTimeout(() => {
 			setShowAlertBox(false);
 		}, 10000);
-
-		console.log(res);
 	};
 
 	return (
-		<div className="flex flex-col p-5 items-center max-w-2xl mx-auto">
+		<main className="flex flex-col py-10 items-center max-w-2xl mx-auto">
 			<div className="mb-5">
 				<h1 className="text-4xl font-bold mb-1">
 					Cadastre-se para postar
 				</h1>
-				<p className="text-lg">
+				<p className="text-lg text-gray-500 text-center">
 					Crie seu usuário e compartilhe suas histórias
 				</p>
 			</div>
@@ -149,23 +140,13 @@ export const Register = () => {
 				</form>
 			</Form>
 
-			{/* Verifying if alert box will show an error or a success message */}
+			{/* Verifying if alert box will show an error message */}
 			{showAlertBox && error?.code !== null && (
 				<Alert className={"mt-3"} variant={"destructive"}>
 					<AlertTitle>{error.title}</AlertTitle>
 					<AlertDescription>{error.description}</AlertDescription>
 				</Alert>
 			)}
-			{showAlertBox && error?.code === null && (
-				<Alert className="mt-3 bg-emerald-600 text-white">
-					<AlertTitle className="font-bold">
-						Cadastro realizado com sucesso
-					</AlertTitle>
-					<AlertDescription>
-						Redirecionando a tela de login
-					</AlertDescription>
-				</Alert>
-			)}
-		</div>
+		</main>
 	);
 };

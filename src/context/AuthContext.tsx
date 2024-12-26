@@ -9,7 +9,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AuthProvider = ({
 	children,
 	value,
-}: { children: React.ReactNode; value: any }) => {
+}: { children: React.ReactNode; value: AuthContextType }) => {
 	return (
 		<AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 	);
