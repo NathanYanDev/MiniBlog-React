@@ -4,6 +4,7 @@ import { z } from "zod";
 // Creating a schema with some validations
 export const registerFormSchema = z
 	.object({
+		avatar: z.string().url("Copie a URL do avatar que deseja inserir"),
 		username: z
 			.string()
 			.min(3, "Nome do usuário precisa de no mínimo 3 caracteres")

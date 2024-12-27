@@ -1,6 +1,6 @@
+import type { AuthContextType } from "@/types/authContext";
 // Importing hooks
 import { createContext, useContext } from "react";
-import type { AuthContextType } from "@/types/authContext";
 
 // Creating Auth Context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

@@ -5,17 +5,30 @@ import { useEffect, useState } from "react";
 // Importing React Router NavLink
 import { NavLink, useLocation } from "react-router";
 
+import { useAuthValue } from "@/context/AuthContext";
 // Importing hooks and context
 import { useAuthentication } from "@/hooks/useAuthentication";
-import { useAuthValue } from "@/context/AuthContext";
 
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 // Importing pages from constants and PageType from types
 import { loggedPages, publicPages } from "@/constants/navigationPages";
 import type { NamePagesType, PageType } from "@/types/navigationPages";
 
 export const Navbar = () => {
 	const { user } = useAuthValue();
-	const { logout } = useAuthentication();
+	const { logout, getAvatar } = useAuthentication();
+	const [avatar, setAvatar] = useState();
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		if (user) {
+			getAvatar(user.uid).then((data) => {
+				if (data) {
+					setAvatar(data.avatar);
+				}
+			});
+		}
+	}, [user]);
 
 	// Creating a state to track which page is active
 	const [activePage, setActivePage] = useState<NamePagesType>("Home");
@@ -54,6 +67,14 @@ export const Navbar = () => {
 					</span>
 				</NavLink>
 			</div>
+			{user && (
+				<div className="flex items-center gap-3">
+					<Avatar>
+						<AvatarImage src={avatar} alt="Profile avatar" />
+					</Avatar>
+					<p className="text-lg text-slate-950">{user.displayName}</p>
+				</div>
+			)}
 			<ul className="nav-links flex">
 				{!user
 					? Object.values(publicPages).map((page: PageType) => (

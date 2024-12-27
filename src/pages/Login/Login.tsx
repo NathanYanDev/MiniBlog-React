@@ -1,3 +1,4 @@
+import { SpinIcon } from "@/components/ui/SpinIcon";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +9,6 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { SpinIcon } from "@/components/ui/SpinIcon";
 import { useAuthentication } from "@/hooks/useAuthentication";
 import { loginFormSchema } from "@/schemas/loginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,7 +49,9 @@ export const Login = () => {
 						name="email"
 						render={({ field }) => (
 							<FormItem className="mb-4">
-								<FormLabel>Email:</FormLabel>
+								<FormLabel className="text-base">
+									Email:
+								</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="Digite o seu email"
@@ -63,7 +65,9 @@ export const Login = () => {
 						name="password"
 						render={({ field }) => (
 							<FormItem className="mb-4">
-								<FormLabel>Senha:</FormLabel>
+								<FormLabel className="text-base">
+									Senha:
+								</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="Digite a sua senha"

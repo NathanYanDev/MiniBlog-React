@@ -12,17 +12,18 @@ import { initializeApp } from "firebase/app";
 import {
 	createUserWithEmailAndPassword,
 	getAuth,
-	updateProfile,
 	signInWithEmailAndPassword,
 	signOut,
+	updateProfile,
 } from "firebase/auth";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 // Importing Error Type
 import type { ErrorType } from "@/types/error";
 
+import type { loginFormSchema } from "@/schemas/loginFormSchema";
 // importing Register Form Schema created using Zod
 import type { registerFormSchema } from "@/schemas/registerFormSchema";
-import type { loginFormSchema } from "@/schemas/loginFormSchema";
 
 export const useAuthentication = () => {
 	// Creating app with firebase config
@@ -43,6 +44,9 @@ export const useAuthentication = () => {
 	// Initializing Firebase Authentication
 	const auth = getAuth(app);
 
+	// Initializing Firebase Firestore Database
+	const db = getFirestore(app);
+
 	// Function to treat memory leak
 	const checkIfCancelled = () => {
 		if (cancelled) {
@@ -60,7 +64,6 @@ export const useAuthentication = () => {
 		}));
 	};
 
-	//
 	const createUser = async (data: z.infer<typeof registerFormSchema>) => {
 		checkIfCancelled();
 		resetErrorState();
@@ -79,6 +82,12 @@ export const useAuthentication = () => {
 			// Update display name profile
 			await updateProfile(user, {
 				displayName: data.username,
+			});
+
+			await setDoc(doc(db, "users", user.uid), {
+				avatar: data.avatar,
+				username: data.username,
+				email: data.email,
 			});
 
 			// Ending loading state
@@ -156,6 +165,19 @@ export const useAuthentication = () => {
 		}
 	};
 
+	const getAvatar = async (userUID: string) => {
+		checkIfCancelled();
+		resetErrorState();
+		setLoading(true);
+
+		const docRef = doc(db, "users", userUID);
+		const docSnap = await getDoc(docRef);
+		const data = docSnap ? docSnap.data() : "";
+
+		setLoading(false);
+		return data;
+	};
+
 	useEffect(() => {
 		return () => setCancelled(true);
 	}, []);
@@ -165,6 +187,7 @@ export const useAuthentication = () => {
 		createUser,
 		login,
 		logout,
+		getAvatar,
 		error,
 		loading,
 	};

@@ -1,15 +1,17 @@
 // Importing hooks
 import { useAuthentication } from "@/hooks/useAuthentication";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 // Importing Types and Schemas
 import { registerFormSchema } from "@/schemas/registerFormSchema";
-import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { z } from "zod";
 
+import { SpinIcon } from "@/components/ui/SpinIcon";
 // Components
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -21,13 +23,14 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { SpinIcon } from "@/components/ui/SpinIcon";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Register = () => {
+	const [avatar, setAvatar] = useState("");
 	// Get createUser, error and loading from useAuthentication
 	const { createUser, error, loading } = useAuthentication();
 
-	// Creating a function to handle with AlertBox
+	// Creating a state to handle with AlertBox
 	const [showAlertBox, setShowAlertBox] = useState(false);
 
 	// Initializes the form with validation using Zod, inferring the type based on the RegisterForm schema
@@ -63,10 +66,47 @@ export const Register = () => {
 					className="w-full flex flex-col gap-2"
 				>
 					<FormField
+						name="avatar"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel className="text-base">
+									Avatar:
+								</FormLabel>
+								<div className="flex items-center gap-6">
+									<FormControl>
+										<Input
+											{...field}
+											placeholder="Insira a URL do avatar"
+											type="text"
+											className="w-4/5"
+											value={field.value}
+											onChange={(e) => {
+												setAvatar(e.target.value);
+												field.onChange(e);
+											}}
+										/>
+									</FormControl>
+									<FormMessage />
+									<Avatar>
+										<AvatarImage
+											src={avatar}
+											alt="avatar"
+										/>
+										<AvatarFallback>
+											<Skeleton />
+										</AvatarFallback>
+									</Avatar>
+								</div>
+							</FormItem>
+						)}
+					/>
+					<FormField
 						name="username"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Nome do usuário:</FormLabel>
+								<FormLabel className="text-base">
+									Nome do usuário:
+								</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="Digite o nome do usuário"
@@ -85,7 +125,9 @@ export const Register = () => {
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Email:</FormLabel>
+								<FormLabel className="text-base">
+									Email:
+								</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="Digite o seu email"
@@ -101,7 +143,9 @@ export const Register = () => {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Senha:</FormLabel>
+								<FormLabel className="text-base">
+									Senha:
+								</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="Digite a sua senha"
@@ -117,7 +161,9 @@ export const Register = () => {
 						name="confirmPassword"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Confirme sua senha:</FormLabel>
+								<FormLabel className="text-base">
+									Confirme sua senha:
+								</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="Confirme a sua senha"
