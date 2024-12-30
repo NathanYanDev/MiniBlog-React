@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from "react-router";
 
 export const Register = () => {
 	const [avatar, setAvatar] = useState("");
@@ -32,6 +33,8 @@ export const Register = () => {
 
 	// Creating a state to handle with AlertBox
 	const [showAlertBox, setShowAlertBox] = useState(false);
+
+	const navigate = useNavigate();
 
 	// Initializes the form with validation using Zod, inferring the type based on the RegisterForm schema
 	const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -43,6 +46,7 @@ export const Register = () => {
 		data: z.infer<typeof registerFormSchema>,
 	) => {
 		await createUser(data).finally(() => setShowAlertBox(true));
+		navigate("/");
 
 		// Hides the alert after 10 seconds
 		setTimeout(() => {

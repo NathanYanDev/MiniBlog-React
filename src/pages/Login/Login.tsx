@@ -14,6 +14,7 @@ import { loginFormSchema } from "@/schemas/loginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import type { z } from "zod";
 
 export const Login = () => {
@@ -23,8 +24,12 @@ export const Login = () => {
 		resolver: zodResolver(loginFormSchema),
 	});
 
+	const navigate = useNavigate();
+
 	const handleSubmitLogin = async (data: z.infer<typeof loginFormSchema>) => {
 		await login(data).finally(() => setShowAlertBox(true));
+
+		navigate("/");
 
 		// Hides the alert after 10 seconds
 		setTimeout(() => {

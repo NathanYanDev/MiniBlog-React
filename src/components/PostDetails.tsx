@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { Link } from "react-router";
+import { LimitedParagraph } from "./LimitedParagraph";
 
 type PostDetailsProps = {
 	post: Post;
@@ -32,7 +33,7 @@ export const PostDetails = ({ post }: PostDetailsProps) => {
 						alt="Post"
 						className="mb-3 w-full h-auto"
 					/>
-					<p>{post.content}</p>
+					<LimitedParagraph text={post.content} limit={150} />
 				</CardContent>
 				<CardFooter>
 					<div className="w-full">
@@ -43,8 +44,8 @@ export const PostDetails = ({ post }: PostDetailsProps) => {
 						))}
 					</div>
 					<Link to={`/posts/${post.id}`}>
-						<Button className="w-16 bg-white text-slate-950 text-md border-2 border-slate-950 hover:text-white hover:bg-slate-950 shadow-none">
-							Ler
+						<Button className="w-32 bg-white text-slate-950 text-md border-2 border-slate-950 hover:text-white hover:bg-slate-950 shadow-none">
+							Ler mais
 						</Button>
 					</Link>
 				</CardFooter>

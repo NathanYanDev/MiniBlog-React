@@ -131,7 +131,7 @@ export const CreatePost = () => {
 									/>
 								</FormControl>
 								<FormDescription>
-									{charCount} / 250
+									{charCount} / 2000
 								</FormDescription>
 								<FormMessage />
 							</FormItem>

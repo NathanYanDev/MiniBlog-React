@@ -2,7 +2,7 @@ import { PostDetails } from "@/components/PostDetails";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useFetchDocuments } from "@/hooks/useFetchDocument";
+import { useFetchDocuments } from "@/hooks/useFetchDocuments";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -23,7 +23,7 @@ export const Home = () => {
 		resolver: zodResolver(tagsFormSchema),
 	});
 
-	const searchTagsSubmit = (data: z.infer<typeof tagsFormSchema>) => {
+	const searchTagsSubmit = () => {
 		if (query) {
 			return navigate(`/search?q=${query}`);
 		}

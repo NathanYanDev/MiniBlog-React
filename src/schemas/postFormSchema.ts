@@ -3,7 +3,7 @@ import { z } from "zod";
 // Defines a Zod schema for validating the post form fields:
 // - 'title' must be a string between 3 and 50 characters.
 // - 'imageURL' must be a valid URL.
-// - 'content' must be a string with a maximum length of 250 characters.
+// - 'content' must be a string with a minimun length of 3 characters.
 // - 'tags' is a string, transformed into an array of lowercase, trimmed tags.
 export const postFormSchema = z.object({
 	title: z
@@ -14,7 +14,7 @@ export const postFormSchema = z.object({
 	content: z
 		.string()
 		.min(1, "O conteúdo não pode estar vazio")
-		.max(250, "Limite máximo de caracteres atingido"),
+		.max(2000, "O conteúdo excedeu 2000 caracteres"),
 	tags: z.string().transform((tags) => {
 		return tags.split(",").map((tag) => tag.trim().toLowerCase());
 	}),
