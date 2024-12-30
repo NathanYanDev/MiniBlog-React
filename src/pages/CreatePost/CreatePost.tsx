@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
+	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,6 +29,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export const CreatePost = () => {
 	// Get user from AuthContext
 	const { user } = useAuthValue();
+
+	const [charCount, setCharCount] = useState(0);
 
 	// Get insertDocument function and response state from custom hook
 	const { insertDocument, response } = useInsertDocument("posts");
@@ -61,7 +65,7 @@ export const CreatePost = () => {
 	};
 
 	return (
-		<main className="flex flex-col items-center justify-center max-w-3xl py-10 mx-auto">
+		<div className="flex flex-col items-center justify-center max-w-3xl py-10 mx-auto">
 			<div className="flex flex-col items-center">
 				<h1 className="text-4xl font-bold mb-3">Criar post</h1>
 				<p className="text-gray-500 text-lg mb-3">
@@ -86,6 +90,7 @@ export const CreatePost = () => {
 										{...field}
 									/>
 								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -102,6 +107,7 @@ export const CreatePost = () => {
 										{...field}
 									/>
 								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -114,10 +120,20 @@ export const CreatePost = () => {
 								</FormLabel>
 								<FormControl>
 									<Textarea
-										placeholder="Insira o conteúdo do post"
 										{...field}
+										placeholder="Insira o conteúdo do post"
+										value={field.value}
+										onChange={(e) => {
+											setCharCount(e.target.value.length);
+											field.onChange(e);
+										}}
+										className="resize-none h-48"
 									/>
 								</FormControl>
+								<FormDescription>
+									{charCount} / 250
+								</FormDescription>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -137,6 +153,7 @@ export const CreatePost = () => {
 										{...field}
 									/>
 								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -165,6 +182,6 @@ export const CreatePost = () => {
 					</AlertDescription>
 				</Alert>
 			)}
-		</main>
+		</div>
 	);
 };

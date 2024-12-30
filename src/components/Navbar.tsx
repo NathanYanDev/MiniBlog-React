@@ -1,15 +1,15 @@
 // Importing shadcn component
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 
 // Importing React Router NavLink
 import { NavLink, useLocation } from "react-router";
 
-import { useAuthValue } from "@/context/AuthContext";
 // Importing hooks and context
 import { useAuthentication } from "@/hooks/useAuthentication";
+import { useAuthValue } from "@/context/AuthContext";
+import { useEffect, useState } from "react";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 // Importing pages from constants and PageType from types
 import { loggedPages, publicPages } from "@/constants/navigationPages";
 import type { NamePagesType, PageType } from "@/types/navigationPages";
@@ -58,7 +58,7 @@ export const Navbar = () => {
 
 	// Defining all the navigation pages
 	return (
-		<nav className="navbar h-auto flex items-center justify-between shadow-lg shadow-black/15">
+		<nav className="navbar sticky w-full top-0 bg-white h-auto flex items-center justify-between shadow-lg shadow-black/15">
 			<div>
 				<NavLink to="/" className="text-xl pl-5">
 					Mini{" "}
@@ -68,7 +68,7 @@ export const Navbar = () => {
 				</NavLink>
 			</div>
 			{user && (
-				<div className="flex items-center gap-3">
+				<div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3 mx-auto">
 					<Avatar>
 						<AvatarImage src={avatar} alt="Profile avatar" />
 					</Avatar>

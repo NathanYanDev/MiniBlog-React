@@ -51,7 +51,7 @@ export const Register = () => {
 	};
 
 	return (
-		<main className="flex flex-col py-10 items-center max-w-2xl mx-auto">
+		<div className="flex flex-col py-10 items-center max-w-2xl mx-auto">
 			<div className="mb-5">
 				<h1 className="text-4xl font-bold mb-1">
 					Cadastre-se para postar
@@ -193,6 +193,6 @@ export const Register = () => {
 					<AlertDescription>{error.description}</AlertDescription>
 				</Alert>
 			)}
-		</main>
+		</div>
 	);
 };

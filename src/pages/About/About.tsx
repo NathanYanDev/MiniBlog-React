@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 export const About = () => {
 	return (
-		<main className="flex flex-col items-center justify-center max-w-3xl py-10 mx-auto">
+		<div className="flex flex-col items-center justify-center max-w-3xl py-10 mx-auto">
 			<h1 className="text-4xl font-bold mb-3">Sobre o Mini Blog</h1>
 			<p className="text-gray-500 text-lg mb-3">
 				Este é um projeto de um{" "}
@@ -22,6 +22,6 @@ export const About = () => {
 					<Button className="h-12 text-xl w-full">Criar post</Button>
 				</Link>
 			</div>
-		</main>
+		</div>
 	);
 };

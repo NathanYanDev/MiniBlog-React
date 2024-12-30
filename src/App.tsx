@@ -25,6 +25,8 @@ import { Register } from "./pages/Register/Register.tsx";
 // Importing User Type from Firebase
 import type { User } from "firebase/auth";
 import { Loading } from "./components/Loading.tsx";
+import { Search } from "./pages/Search/Search.tsx";
+import { Post } from "./pages/Post/Post.tsx";
 
 export function App() {
 	const [user, setUser] = useState<User | undefined | null>(undefined);
@@ -57,10 +59,12 @@ export function App() {
 				<AuthProvider value={{ user }}>
 					<BrowserRouter>
 						<Navbar />
-						<div className="h-screen mt-3">
+						<main className="min-h-screen mt-3">
 							<Routes>
 								<Route index element={<Home />} />
 								<Route path="/about" element={<About />} />
+								<Route path="/search" element={<Search />} />
+								<Route path="/posts/:id" element={<Post />} />
 								<Route
 									path="/login"
 									element={
@@ -102,7 +106,7 @@ export function App() {
 									}
 								/>
 							</Routes>
-						</div>
+						</main>
 						<Footer />
 					</BrowserRouter>
 				</AuthProvider>

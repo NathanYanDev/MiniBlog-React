@@ -33,7 +33,7 @@ export const Login = () => {
 	};
 
 	return (
-		<main className="flex flex-col py-10 items-center max-w-2xl mx-auto">
+		<div className="flex flex-col py-10 items-center max-w-2xl mx-auto">
 			<div className="mb-5">
 				<h1 className="text-4xl font-bold mb-1 text-center">Entrar</h1>
 				<p className="text-lg text-gray-500 text-center">
@@ -100,6 +100,6 @@ export const Login = () => {
 					<AlertDescription>{error.description}</AlertDescription>
 				</Alert>
 			)}
-		</main>
+		</div>
 	);
 };

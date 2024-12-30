@@ -11,7 +11,10 @@ export const postFormSchema = z.object({
 		.min(3, "Insira um título com 3 caracteres ou mais")
 		.max(50, "Insira um título com menos de 50 caracteres"),
 	imageURL: z.string().url("Insira uma URL válida"),
-	content: z.string().max(250, "Limite máximo de caracteres atingidos"),
+	content: z
+		.string()
+		.min(1, "O conteúdo não pode estar vazio")
+		.max(250, "Limite máximo de caracteres atingido"),
 	tags: z.string().transform((tags) => {
 		return tags.split(",").map((tag) => tag.trim().toLowerCase());
 	}),
