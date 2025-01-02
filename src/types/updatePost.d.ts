@@ -1,10 +1,8 @@
-export type Post = {
-	id: string;
+export type UpdatePost = {
 	uid: string;
 	title: string;
 	imageURL: string;
 	content: string;
 	tags: string[];
-	createdAt: string;
 	createdBy: string;
 };

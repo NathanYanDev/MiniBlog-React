@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuthValue } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useFetchDocuments } from "@/hooks/useFetchDocuments";
@@ -10,11 +10,30 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useDeleteDocument } from "@/hooks/useDeleteDocument";
+import { Loading } from "@/components/Loading";
+import { useState } from "react";
 
 export const Dashboard = () => {
 	const { user } = useAuthValue();
 	const uid = user?.uid;
-	const { documents: posts } = useFetchDocuments("posts", null, uid);
+
+	const { documents: posts, loading } = useFetchDocuments("posts", null, uid);
+	const { deleteDocument } = useDeleteDocument("posts");
+
+	const [ShowAlertBox, setShowAlertBox] = useState(false);
+
+	const navigate = useNavigate();
+
+	const handleDeleteDocument = async (id: string) => {
+		await deleteDocument(id);
+		setShowAlertBox(true);
+	};
+
+	if (loading) {
+		return <Loading />;
+	}
 
 	return (
 		<div className="flex flex-col py-10 max-w-screen-lg mx-auto">
@@ -55,12 +74,20 @@ export const Dashboard = () => {
 											Ver
 										</Button>
 									</Link>
-									<Button className="w-24 bg-emerald-700 hover:bg-white hover:text-emerald-700">
+									<Button
+										className="w-24 bg-emerald-700 hover:bg-white hover:text-emerald-700"
+										onClick={() =>
+											navigate(`/posts/edit/${post.id}`)
+										}
+									>
 										Editar
 									</Button>
 									<Button
 										className="w-24 hover:text-destructive hover:bg-white"
 										variant={"destructive"}
+										onClick={() =>
+											handleDeleteDocument(post.id)
+										}
 									>
 										Excluir
 									</Button>
@@ -69,6 +96,14 @@ export const Dashboard = () => {
 						))}
 					</TableBody>
 				</Table>
+			)}
+			{ShowAlertBox && (
+				<Alert variant={"destructive"}>
+					<AlertTitle>Post excluído com sucesso</AlertTitle>
+					<AlertDescription>
+						Recarregue a página para ver as alterações
+					</AlertDescription>
+				</Alert>
 			)}
 		</div>
 	);

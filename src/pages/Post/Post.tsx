@@ -25,7 +25,7 @@ export const Post = () => {
 							{post.tags.map((tag) => (
 								<span
 									key={tag}
-									className="mr-2 text-lg text-gray-700"
+									className="mr-2 text-lg text-gray-800"
 								>
 									<span className="font-bold text-black">
 										#

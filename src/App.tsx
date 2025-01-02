@@ -13,6 +13,7 @@ import { useAuthentication } from "./hooks/useAuthentication.ts";
 // Importing components
 import { Footer } from "./components/Footer.tsx";
 import { Navbar } from "./components/Navbar.tsx";
+import { Loading } from "./components/Loading.tsx";
 
 // Importing pages
 import { About } from "./pages/About/About.tsx";
@@ -21,12 +22,12 @@ import { Dashboard } from "./pages/Dashboard/Dashboard.tsx";
 import { Home } from "./pages/Home/Home.tsx";
 import { Login } from "./pages/Login/Login.tsx";
 import { Register } from "./pages/Register/Register.tsx";
+import { Search } from "./pages/Search/Search.tsx";
+import { Post } from "./pages/Post/Post.tsx";
+import { EditPost } from "./pages/EditPost/EditPost.tsx";
 
 // Importing User Type from Firebase
 import type { User } from "firebase/auth";
-import { Loading } from "./components/Loading.tsx";
-import { Search } from "./pages/Search/Search.tsx";
-import { Post } from "./pages/Post/Post.tsx";
 
 export function App() {
 	const [user, setUser] = useState<User | undefined | null>(undefined);
@@ -90,6 +91,16 @@ export function App() {
 									element={
 										user ? (
 											<Dashboard />
+										) : (
+											<Navigate to={"/login"} />
+										)
+									}
+								/>
+								<Route
+									path="/posts/edit/:id"
+									element={
+										user ? (
+											<EditPost />
 										) : (
 											<Navigate to={"/login"} />
 										)
