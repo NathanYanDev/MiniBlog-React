@@ -4,11 +4,13 @@ import "./App.css";
 // Importing react-router related modules
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
+// Importing Firebase modules
 import { onAuthStateChanged } from "firebase/auth";
-import { useEffect, useState } from "react";
+
 // Importing Hooks, Context and functions
 import { AuthProvider } from "./context/AuthContext.tsx";
 import { useAuthentication } from "./hooks/useAuthentication.ts";
+import { useEffect, useState } from "react";
 
 // Importing components
 import { Footer } from "./components/Footer.tsx";
@@ -30,98 +32,92 @@ import { EditPost } from "./pages/EditPost/EditPost.tsx";
 import type { User } from "firebase/auth";
 
 export function App() {
+	// State to store the user
 	const [user, setUser] = useState<User | undefined | null>(undefined);
+
+	// Custom hook to get the auth object from Firebase
 	const { auth } = useAuthentication();
+
+	// State to store the loading status
 	const [loading, setLoading] = useState(true);
 
-	const loadingUser = user === undefined;
-
+	// Simulating a loading time of 3 seconds
 	useEffect(() => {
 		setTimeout(() => {
 			setLoading(false);
 		}, 3000);
 	}, []);
 
+	// Listening to the auth state changes
 	useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
 			setUser(user);
 		});
 	}, [auth]);
 
-	if (loadingUser && user != null) {
-		return <p>Carregando...</p>;
+	// If the loading is true, show the loading component
+	if (loading) {
+		return <Loading />;
 	}
 
 	return (
 		<div className="w-full">
-			{loading ? (
-				<Loading />
-			) : (
-				<AuthProvider value={{ user }}>
-					<BrowserRouter>
-						<Navbar />
-						<main className="min-h-screen mt-3">
-							<Routes>
-								<Route index element={<Home />} />
-								<Route path="/about" element={<About />} />
-								<Route path="/search" element={<Search />} />
-								<Route path="/posts/:id" element={<Post />} />
-								<Route
-									path="/login"
-									element={
-										!user ? (
-											<Login />
-										) : (
-											<Navigate to={"/"} />
-										)
-									}
-								/>
-								<Route
-									path="/register"
-									element={
-										!user ? (
-											<Register />
-										) : (
-											<Navigate to={"/"} />
-										)
-									}
-								/>
-								<Route
-									path="/dashboard"
-									element={
-										user ? (
-											<Dashboard />
-										) : (
-											<Navigate to={"/login"} />
-										)
-									}
-								/>
-								<Route
-									path="/posts/edit/:id"
-									element={
-										user ? (
-											<EditPost />
-										) : (
-											<Navigate to={"/login"} />
-										)
-									}
-								/>
-								<Route
-									path="/posts/create"
-									element={
-										user ? (
-											<CreatePost />
-										) : (
-											<Navigate to={"/login"} />
-										)
-									}
-								/>
-							</Routes>
-						</main>
-						<Footer />
-					</BrowserRouter>
-				</AuthProvider>
-			)}
+			<AuthProvider value={{ user }}>
+				<BrowserRouter>
+					<Navbar />
+					<main className="min-h-screen mt-3">
+						<Routes>
+							<Route index element={<Home />} />
+							<Route path="/about" element={<About />} />
+							<Route path="/search" element={<Search />} />
+							<Route path="/posts/:id" element={<Post />} />
+							<Route
+								path="/login"
+								element={
+									!user ? <Login /> : <Navigate to={"/"} />
+								}
+							/>
+							<Route
+								path="/register"
+								element={
+									!user ? <Register /> : <Navigate to={"/"} />
+								}
+							/>
+							<Route
+								path="/dashboard"
+								element={
+									user ? (
+										<Dashboard />
+									) : (
+										<Navigate to={"/login"} />
+									)
+								}
+							/>
+							<Route
+								path="/posts/edit/:id"
+								element={
+									user ? (
+										<EditPost />
+									) : (
+										<Navigate to={"/login"} />
+									)
+								}
+							/>
+							<Route
+								path="/posts/create"
+								element={
+									user ? (
+										<CreatePost />
+									) : (
+										<Navigate to={"/login"} />
+									)
+								}
+							/>
+						</Routes>
+					</main>
+					<Footer />
+				</BrowserRouter>
+			</AuthProvider>
 		</div>
 	);
 }

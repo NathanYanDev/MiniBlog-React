@@ -1,8 +1,12 @@
+// Importing hooks from React Router and Fetch Document
 import { useFetchDocument } from "@/hooks/useFetchDocument";
 import { useParams } from "react-router";
 
 export const Post = () => {
+	// Getting the id from the URL
 	const { id } = useParams();
+
+	// Fetching the post document from Firestore
 	const { document: post } = useFetchDocument("posts", id || "");
 
 	return (

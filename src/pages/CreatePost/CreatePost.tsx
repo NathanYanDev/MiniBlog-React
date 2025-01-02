@@ -30,6 +30,7 @@ export const CreatePost = () => {
 	// Get user from AuthContext
 	const { user } = useAuthValue();
 
+	// Creating a state to handle with character count
 	const [charCount, setCharCount] = useState(0);
 
 	// Get insertDocument function and response state from custom hook

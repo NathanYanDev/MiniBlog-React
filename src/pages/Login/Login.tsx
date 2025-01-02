@@ -1,3 +1,4 @@
+// Importing components
 import { SpinIcon } from "@/components/ui/SpinIcon";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -9,23 +10,34 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+// Importing hooks
 import { useAuthentication } from "@/hooks/useAuthentication";
-import { loginFormSchema } from "@/schemas/loginFormSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+
+// Importing zod types
 import type { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginFormSchema } from "@/schemas/loginFormSchema";
 
 export const Login = () => {
+	// State to show the alert box
 	const [showAlertBox, setShowAlertBox] = useState(false);
+
+	// Destructuring the login function, error and loading from the useAuthentication hook
 	const { login, error, loading } = useAuthentication();
+
+	// Using useForm to create form with loginFormSchema
 	const form = useForm<z.infer<typeof loginFormSchema>>({
 		resolver: zodResolver(loginFormSchema),
 	});
 
+	// Defining navigate
 	const navigate = useNavigate();
 
+	// Function to submit login form
 	const handleSubmitLogin = async (data: z.infer<typeof loginFormSchema>) => {
 		await login(data).finally(() => setShowAlertBox(true));
 

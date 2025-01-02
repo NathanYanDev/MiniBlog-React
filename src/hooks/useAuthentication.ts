@@ -21,10 +21,11 @@ import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 // Importing Error Type
 import type { ErrorType } from "@/types/error";
 
-import type { loginFormSchema } from "@/schemas/loginFormSchema";
-// importing Register Form Schema created using Zod
+// importing zod schemas
 import type { registerFormSchema } from "@/schemas/registerFormSchema";
+import type { loginFormSchema } from "@/schemas/loginFormSchema";
 
+// Exporting useAuthentication hook
 export const useAuthentication = () => {
 	// Creating app with firebase config
 	const app = initializeApp(firebaseConfig);
@@ -36,6 +37,7 @@ export const useAuthentication = () => {
 		description: "",
 	});
 
+	// State to handle loading
 	const [loading, setLoading] = useState<boolean>(false);
 
 	// State to handle component unmounting
@@ -134,6 +136,7 @@ export const useAuthentication = () => {
 		setLoading(true);
 
 		try {
+			// Authenticating user with email and password
 			await signInWithEmailAndPassword(auth, data.email, data.password);
 
 			// Ending loading state
@@ -165,6 +168,7 @@ export const useAuthentication = () => {
 		}
 	};
 
+	// Get user avatar from firestore
 	const getAvatar = async (userUID: string) => {
 		checkIfCancelled();
 		resetErrorState();
@@ -178,6 +182,7 @@ export const useAuthentication = () => {
 		return data;
 	};
 
+	// Sets the 'cancelled' state to true when the component is unmounted or the effect is cleaned up.
 	useEffect(() => {
 		return () => setCancelled(true);
 	}, []);

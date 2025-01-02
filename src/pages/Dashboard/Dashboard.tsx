@@ -1,5 +1,10 @@
+// Importing hooks and context
 import { Link, useNavigate } from "react-router";
 import { useAuthValue } from "@/context/AuthContext";
+import { useDeleteDocument } from "@/hooks/useDeleteDocument";
+import { useState } from "react";
+
+// Importing components
 import { Button } from "@/components/ui/button";
 import { useFetchDocuments } from "@/hooks/useFetchDocuments";
 import {
@@ -11,26 +16,31 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useDeleteDocument } from "@/hooks/useDeleteDocument";
 import { Loading } from "@/components/Loading";
-import { useState } from "react";
 
 export const Dashboard = () => {
+	// Fetching posts and user
 	const { user } = useAuthValue();
 	const uid = user?.uid;
 
 	const { documents: posts, loading } = useFetchDocuments("posts", null, uid);
+
+	// Deleting post
 	const { deleteDocument } = useDeleteDocument("posts");
 
+	// Alert box
 	const [ShowAlertBox, setShowAlertBox] = useState(false);
 
+	// Navigation
 	const navigate = useNavigate();
 
+	// Function to delete post
 	const handleDeleteDocument = async (id: string) => {
 		await deleteDocument(id);
 		setShowAlertBox(true);
 	};
 
+	// If loading, show loading component
 	if (loading) {
 		return <Loading />;
 	}

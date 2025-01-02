@@ -2,13 +2,13 @@
 import { useAuthentication } from "@/hooks/useAuthentication";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 // Importing Types and Schemas
 import { registerFormSchema } from "@/schemas/registerFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 
-import { SpinIcon } from "@/components/ui/SpinIcon";
 // Components
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useNavigate } from "react-router";
+import { SpinIcon } from "@/components/ui/SpinIcon";
 
 export const Register = () => {
 	const [avatar, setAvatar] = useState("");

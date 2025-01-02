@@ -1,4 +1,6 @@
+// Importing types
 import type { AuthContextType } from "@/types/authContext";
+
 // Importing hooks
 import { createContext, useContext } from "react";
 

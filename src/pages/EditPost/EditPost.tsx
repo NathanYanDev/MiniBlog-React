@@ -28,12 +28,16 @@ import { useFetchDocument } from "@/hooks/useFetchDocument";
 import { useUpdateDocument } from "@/hooks/useUpdateDocument";
 
 export const EditPost = () => {
+	// Get id from URL
 	const { id } = useParams();
+
+	// Get post from Firestore
 	const { document: post } = useFetchDocument("posts", id || "");
 
 	// Get user from AuthContext
 	const { user } = useAuthValue();
 
+	// Creating a state to handle with character count
 	const [charCount, setCharCount] = useState(0);
 
 	// Get insertDocument function and response state from custom hook
@@ -50,7 +54,7 @@ export const EditPost = () => {
 	// Initializes the 'navigate' function from 'react-router' for programmatic navigation.
 	const navigate = useNavigate();
 
-	// Handles form submission: adds user info to post data, inserts the document, and navigates to the home page.
+	// Submits the edited post, adding user info to the data, updates the document, and navigates to the dashboard.
 	const editPostSubmit = (data: z.infer<typeof postFormSchema>) => {
 		if (user) {
 			const updateData = {
@@ -62,7 +66,7 @@ export const EditPost = () => {
 			navigate("/dashboard");
 		}
 
-		// Hides the alert after 10 seconds
+		// Hides the alert box after 10 seconds.
 		setTimeout(() => {
 			setShowAlertBox(false);
 		}, 10000);

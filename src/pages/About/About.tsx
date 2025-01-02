@@ -1,6 +1,10 @@
+// Importing UI component
 import { Button } from "@/components/ui/button";
+
+// Importing Link from react-router
 import { Link } from "react-router";
 
+// About component
 export const About = () => {
 	return (
 		<div className="flex flex-col items-center justify-center max-w-3xl py-10 mx-auto">

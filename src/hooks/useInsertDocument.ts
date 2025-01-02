@@ -12,7 +12,7 @@ import {
 // Importing hooks from React
 import { useEffect, useReducer, useState } from "react";
 
-// Importing Type from zod and custom schema
+// Importing Zod and schemas
 import type { z } from "zod";
 import type { postFormSchema } from "@/schemas/postFormSchema";
 
@@ -56,7 +56,7 @@ const insertReducer = (state: State, action: Action): State => {
 	}
 };
 
-// Function to insert document on database
+// Exporting useInsertDocument hook
 export const useInsertDocument = (docCollection: string) => {
 	// Initializes the 'response' state and 'dispatch' function using the 'useReducer' hook with the 'insertReducer' and an initial state.
 	const [response, dispatch] = useReducer(insertReducer, {

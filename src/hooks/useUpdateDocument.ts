@@ -1,8 +1,10 @@
 // Importing firebase functions, config and type
 import { firebaseConfig } from "@/firebase/config";
-import type { UpdatePost } from "@/types/updatePost";
 import { initializeApp } from "firebase/app";
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
+
+// Importing types
+import type { UpdatePost } from "@/types/updatePost";
 
 // Importing hooks from React
 import { useEffect, useReducer, useState } from "react";
@@ -28,10 +30,10 @@ const app = initializeApp(firebaseConfig);
 // Get database from firestore
 const db = getFirestore(app);
 
-// A reducer function that updates the 'state' based on the 'action' type:
-// - 'LOADING' sets loading to true and error to null.
-// - 'INSERTED_DOC' sets loading to false and error to null.
-// - 'ERROR' sets loading to false and updates the error with the provided payload.
+// Reducer function managing state transitions for document update process.
+// - "LOADING": Sets loading to true and clears any error.
+// - "UPDATE_DOC": Resets loading to false after a successful document update.
+// - "ERROR": Sets loading to false and stores the error from the action payload.
 const updateReducer = (state: State, action: Action): State => {
 	const type = action.type;
 
@@ -47,9 +49,9 @@ const updateReducer = (state: State, action: Action): State => {
 	}
 };
 
-// Function to insert document on database
+// Exporting useUpdateDocument hook
 export const useUpdateDocument = (docCollection: string) => {
-	// Initializes the 'response' state and 'dispatch' function using the 'useReducer' hook with the 'insertReducer' and an initial state.
+	// Initializes the 'response' state and 'dispatch' function using the 'useReducer' hook with the 'updateReducer' and an initial state.
 	const [response, dispatch] = useReducer(updateReducer, {
 		loading: null,
 		error: null,
@@ -58,12 +60,14 @@ export const useUpdateDocument = (docCollection: string) => {
 	// Treat memory leak
 	const [cancelled, setCancelled] = useState(false);
 
+	// Dispatches the action only if the 'cancelled' flag is false, preventing unnecessary dispatches.
 	const checkCancelBeforeDispatch = (action: Action) => {
 		if (!cancelled) {
 			dispatch(action);
 		}
 	};
 
+	// Function to update a document in Firestore
 	const updateDocument = async (id: string, data: UpdatePost) => {
 		// Initialize loading state
 		checkCancelBeforeDispatch({
@@ -71,6 +75,7 @@ export const useUpdateDocument = (docCollection: string) => {
 		});
 
 		try {
+			// Updates a document in Firestore with new data, then dispatches the "UPDATE_DOC" action with a success message, if not cancelled.
 			const docRef = doc(db, docCollection, id);
 			await updateDoc(docRef, data);
 
@@ -79,6 +84,7 @@ export const useUpdateDocument = (docCollection: string) => {
 				payload: "Documento atualizado com sucesso",
 			});
 		} catch (error) {
+			// If the error is an instance of Error, dispatches the "ERROR" action with the error message, if not cancelled.
 			if (error instanceof Error) {
 				checkCancelBeforeDispatch({
 					type: "ERROR",

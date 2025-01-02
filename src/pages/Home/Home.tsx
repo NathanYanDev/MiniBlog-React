@@ -1,34 +1,49 @@
+// Importing components
 import { PostDetails } from "@/components/PostDetails";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useFetchDocuments } from "@/hooks/useFetchDocuments";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
-import { z } from "zod";
 import { Loading } from "@/components/Loading";
 
+// Importing hooks
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useFetchDocuments } from "@/hooks/useFetchDocuments";
+import { Link, useNavigate } from "react-router";
+
+// Importing zod and zodResolver
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Creating schema for tagsForm
 const tagsFormSchema = z.object({
 	tags: z.string(),
 });
 
 export const Home = () => {
+	// Using useState to store the query
 	const [query, SetQuery] = useState("");
+
+	// Using useFetchDocuments to fetch posts
 	const { documents: posts, loading } = useFetchDocuments("posts");
+
+	// Defining navigate
 	const navigate = useNavigate();
 
+	// Using useForm to create form with tagsFormSchema
 	const form = useForm<z.infer<typeof tagsFormSchema>>({
 		resolver: zodResolver(tagsFormSchema),
 	});
 
+	// Function to submit tagsForm
 	const searchTagsSubmit = () => {
+		// If query is not empty, navigate to /search?q=query
 		if (query) {
 			return navigate(`/search?q=${query}`);
 		}
 	};
 
+	// If loading is true, return Loading component
 	if (loading) {
 		return <Loading />;
 	}

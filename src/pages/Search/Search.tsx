@@ -1,12 +1,22 @@
+// Importing hooks
 import { useQuery } from "@/hooks/useQuery";
 import { useFetchDocuments } from "@/hooks/useFetchDocuments";
-import { PostDetails } from "@/components/PostDetails";
-import { Button } from "@/components/ui/button";
+
+// Importing Link component
 import { Link } from "react-router";
 
+// Importing components
+import { PostDetails } from "@/components/PostDetails";
+import { Button } from "@/components/ui/button";
+
 export const Search = () => {
+	// Getting the query from the URL
 	const query = useQuery();
+
+	// Getting the search query from the URL
 	const search = query.get("q");
+
+	// Fetching the posts documents from Firestore
 	const { documents: posts } = useFetchDocuments("posts", search || "");
 
 	return (
